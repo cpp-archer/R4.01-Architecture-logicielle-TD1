@@ -1,5 +1,6 @@
 <?php
-    $link = mysqli_connect('localhost', 'root', '', 'blog_db');
+    include 'config.php';
+    $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     
     $query= 'SELECT login FROM Users WHERE login="'.$_POST['login'].'" and password="'.$_POST['password'].'"';
     $resultlogin = mysqli_query($link, $query );
