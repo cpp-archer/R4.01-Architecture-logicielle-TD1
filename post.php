@@ -1,15 +1,8 @@
 <?php
-    include 'config.php';
+require_once 'model.php';
 
-    $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-    
-    $result = mysqli_query($link, 'SELECT * FROM Post WHERE id='.$_GET['id'] );
-    $post = mysqli_fetch_assoc($result);
+$post = getPost( $_GET['id'] );
 
-    mysqli_close( $link );
-    require 'view/post.php';
-
+// inclut le code de la présentation HTML
+require 'view/post.php';
 ?>
-
-
-
