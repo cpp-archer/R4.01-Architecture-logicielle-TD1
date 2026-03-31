@@ -6,38 +6,21 @@
     $resultlogin = mysqli_query($link, $query );
     
     if( mysqli_num_rows( $resultlogin) ){
+        $login = $_POST['login'];
         mysqli_free_result( $resultlogin );
         $resultall = mysqli_query($link, 'SELECT id, title FROM Post');
+        $annonces = array();
+        while ($row = mysqli_fetch_assoc($resultall)) {
+            $annonces[] = $row;
+        }
+
     }
-    else{
-        header( "refresh:5;url=index.html" );
-        echo 'Erreur de login et/ou de mot de passe (redirection automatique dans 5 sec.)';
-        exit;
-    }
+//    else{
+//        header( "refresh:5;url=index.php" );
+//        echo 'Erreur de login et/ou de mot de passe (redirection automatique dans 5 sec.)';
+//        exit;
+//    }
+    mysqli_close($link);
+    require 'view/annonces.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="fr">
- <head>
-  <title>Exemple Blog Basic PHP</title>
-  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
- </head>
- <body>
-    <p> Hello <?php echo $_POST['login']; ?> </p>
-    <h1>List of Posts</h1>
-    <ul>
-        <?php while ($row = mysqli_fetch_assoc($resultall)): ?>
-        <li>
-            <a href="post.php?id=<?php echo $row['id']; ?>">
-            <?php echo $row['title']; ?>
-            </a>
-        </li>
-        <?php endwhile ?>
-    </ul>
-
- </body>
-</html>
-
-<?php
-    mysqli_close( $link );
-?>
