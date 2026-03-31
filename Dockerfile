@@ -1,7 +1,7 @@
 FROM php:8.5-apache
 
 # Install mysqli extension
-RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
+RUN docker-php-ext-install mysqli  pdo_mysql && docker-php-ext-enable mysqli pdo_mysql
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite

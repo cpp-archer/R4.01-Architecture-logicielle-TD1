@@ -3,59 +3,70 @@
 require 'config.php';
 function openConnection()
 {
-    $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-return $link;
+try{
+    $bdd = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS);
+} catch(PDOException $e){
+    print "Erreur de connexion ! :".$e->getMessage() . "<br/>";
+    die();
+}
+return $bdd;
+
 }
 
 function closeConnection($link)
 {
-mysqli_close($link);
+    $bdd = null;
 }
 
+//on verifie si l'utilisateur existe deja dans la bdd
 function isUser( $login, $password )
 {
-$isuser = False ;
-$link = openConnection();
+    $isuser = False ;
 
-$query= 'SELECT login FROM Users WHERE login="'.$login.'" and password="'.$password.'"';
-$result = mysqli_query($link, $query );
+    $bdd = openConnection();
 
-if( mysqli_num_rows( $result) )
-$isuser = True;
+    $query= 'SELECT login FROM Users WHERE login="'.$login.'" and password="'.$password.'"';
+    $result = $bdd->query($query);
 
-mysqli_free_result( $result );
-closeConnection($link);
+    if($result->rowCount())
+        $isuser = True;
 
-return $isuser;
+    $result->closeCursor();
+   closeConnection($bdd);
+
+    return $isuser;
 }
 
+//on récupère toutes les annonces dans la bdd
 function getAllAnnonces()
 {
-$link = openConnection();
+    $bdd = openConnection();
 
-$result = mysqli_query($link,'SELECT id, title FROM Post');
-$annonces = array();
+    $result = $bdd->query('SELECT id, title FROM Post');
+    $annonces = array();
 
-while ($row = mysqli_fetch_assoc($result)) {
-$annonces[] = $row;
+    while ($row = $result->fetch()) {
+        $annonces[] = $row;
+    }
+
+    $result->closeCursor();
+    closeConnection($bdd);
+
+    return $annonces;
 }
 
-mysqli_free_result( $result);
-closeConnection($link);
-
-return $annonces;
-}
-
+//on récupère tout les posts de la bdd
 function getPost( $id )
 {
-$link = openConnection();
+    $bdd = openConnection();
+    $id = intval($id);
 
-$id = intval($id);
-$result = mysqli_query($link, 'SELECT * FROM Post WHERE id='.$id );
-$post = mysqli_fetch_assoc($result);
+    $result = $bdd->query('SELECT * FROM Post WHERE id=' . $id);
+    $post = $result->fetch();
 
-mysqli_free_result( $result);
-closeConnection($link);
-return $post;
+    $result->closeCursor();
+    closeConnection($bdd);
+
+    return $post;
 }
 
