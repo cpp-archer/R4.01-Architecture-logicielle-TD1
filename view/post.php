@@ -1,16 +1,23 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <title>Exemple Blog Basic PHP</title>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-</head>
-<body>
+<?php
+if( !isset( $login) or $login=='' ){
+    header( "refresh:5;url=index.php" );
+    echo 'Erreur de login et/ou de mot de passe (redirection automatique dans 5 sec.)';
+    exit;
+}
+?>
 
-<!--<h1>--><?php //$post = [];
-    echo $post['title']; ?></h1>
+<?php $title= $post['title']; ?>
 
-<div class="date"> <?php echo $post['date']; ?> </div>
-<div class="body"> <?php echo $post['body']; ?> </div>
+<?php ob_start(); ?>
+<h1><?php echo $post['title'];?></h1>
+            <div class="date">
+                <?php echo $post['date'];?>
+            </div>
 
-</body>
-</html>
+        <div class="body">
+    <?php echo $post['body'];?>
+</div>
+<?php $content = ob_get_clean(); ?>
+
+<?php require 'layout.php'; ?>
+
