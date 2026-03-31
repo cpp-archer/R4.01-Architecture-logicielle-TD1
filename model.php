@@ -1,11 +1,12 @@
 <?php
 
-require 'config.php';
+require 'config.php'; //fichier de config
 function openConnection()
 {
 try{
+    //on crée l'objet de PDO pour se connecter
     $bdd = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS);
-} catch(PDOException $e){
+} catch(PDOException $e){ //cas d'erreur
     print "Erreur de connexion ! :".$e->getMessage() . "<br/>";
     die();
 }
@@ -13,6 +14,7 @@ return $bdd;
 
 }
 
+//liberer la connexion
 function closeConnection($link)
 {
     $bdd = null;
@@ -42,10 +44,11 @@ function getAllAnnonces()
 {
     $bdd = openConnection();
 
+    //verif login et MDP
     $result = $bdd->query('SELECT id, title FROM Post');
     $annonces = array();
 
-    while ($row = $result->fetch()) {
+    while ($row = $result->fetch()) { //si on trouve une ligne correspondante
         $annonces[] = $row;
     }
 
